@@ -1,14 +1,31 @@
-#!/bin/bash
+docker build -t python_test .
+  
+# check if the production contaier is not running
 
-set -e
+if [ ! "$(docker ps -q -f name=python)" ];then
 
-if [ $1 == "--push" ]; then
-    WILL_PUSH=1
+    # cehck if the container is in docker ps -a
+
+    if [ "$(docker ps -aq -f status=exited -f name=python)" ];then
+
+        docker rm python
+
+    fi
+
+    run
+
 else
-    WILL_PUSH=0
+
+    stop_rm
+
+    run
+
 fi
 
-docker buildx build \
-      --platform linux/amd64,linux/arm64 \
-      -t docker/getting-started:latest \
-      $( (( $WILL_PUSH == 1 )) && printf %s '--push' ) .
+# remove <none>:<none> image in docker images
+
+if [ "$(docker images -f "dangling=true" -q" ];then
+
+    docker rmi $(docker images -f "dangling=true" -q)
+
+fi
